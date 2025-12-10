@@ -4,72 +4,47 @@ import pygame, random
 pygame.init()
 
 def make_text(font_object, text, color, background_color):
-    # TODO: Use the given font_object to create and return a rendered text Surface.
-    #       - Use font_object.render(...)
-    #       - Make sure antialias is set to True
-    #       - Use the given text, color, and background_color
-    pass # TODO: remove this when finished
-
-
+    text_surface = font_object.render(text, True, color)
+    text_rect = text_surface.get_rect()
 def blit(surface, item, rect):
-    # TODO: Draw (blit) the given item (Surface) onto the given surface at the given rect.
-    #       - Use the surface.blit(...) method
-    pass # TODO: remove this when finished
-
-
+    surface.blit(item, rect)
+    pygame.display.flip()
 def fill(surface, color):
-    # TODO: Fill the entire surface with the given color using surface.fill(...)
-    pass # TODO: remove this when finished
-
-
+    surface.fill(color)
+    pygame.display.flip()
+    pygame.display.update()
 def update_display():
-    # TODO: Update the entire display so that any drawing shows up on the screen.
-    #       - Use pygame.display.update()
-    pass # TODO: remove this when finished
-
+    pygame.display.update()
+    pygame.display.flip()
 
 # Set display surface
-# TODO:
-#   - Create WINDOW_WIDTH and WINDOW_HEIGHT constants (e.g., 1000 x 400).
-#   - Use pygame.display.set_mode to create the display_surface with that size.
-#   - Set a window caption like "Feed the Dragon" using pygame.display.set_caption(...).
-
+WINDOW_WIDTH = 800
+WINDOW_HEIGHT = 600
+display_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+pygame.display.set_caption("Feed the Dragon")
 
 # Set FPS and clock
-# TODO:
-#   - Create an FPS constant (e.g., 60).
-#   - Create a clock object using pygame.time.Clock() for controlling the frame rate.
-
+FPS = 60
+pygame.time.Clock().tick(FPS)
 
 # Set game values
-# TODO:
-#   - Create constants for:
-#       * PLAYER_STARTING_LIVES (e.g., 5)
-#       * PLAYER_VELOCITY (how fast the dragon moves up/down) (e.g., 10)
-#       * COIN_STARTING_VELOCITY (how fast the coin moves at the start) (e.g, 10)
-#       * COIN_ACCELERATION (how much faster the coin gets after each catch) (e.g., 0.5)
-#       * BUFFER_DISTANCE (how far off-screen to respawn the coin on the right) (e.g, 100)
-#   - Create variables for:
-#       * score (starting at 0)
-#       * player_lives (start at PLAYER_STARTING_LIVES)
-#       * coin_velocity (start at COIN_STARTING_VELOCITY)
-
+PLAYER_VELOCITY=10
+COIN_STARTING_VELOCITY=10
+COIN_ACCELERATION=0.9
+BUFFER_DISTANCE=200
+SCORE_STARTING=0
+PLAYER_LIVES=PLAYER_STARTING_LIVES
+COIN_VELOCITY=COIN_STARTING_VELOCITY
 
 # Set colors
-# TODO:
-#   - Define color constants using RGB tuples, such as:
-#       * GREEN
-#       * DARKGREEN:  RGB value of 10, 50, 10
-#       * WHITE
-#       * BLACK
-
+DARKGREEN=50
+GREEN=20
+WHITE=255
+BLACK=0
 
 # Set fonts
-# TODO:
-#   - Create a font object using pygame.font.Font(...)
-#   - Use the provided font file from the assets folder (e.g., "assets/AttackGraffiti.ttf")
-#   - Choose a font size (e.g., 32)
-
+pygame.font.Font()
+font_size=45
 
 # Set text
 # TODO:
@@ -82,6 +57,16 @@ def update_display():
 #       * score_rect at the top-left (e.g., (10, 10))
 #       * title_rect centered horizontally at the top
 #       * lives_rect at the top-right (e.g., (WINDOW_WIDTH - 10, 10))
+score_text= SCORE_STARTING= 1
+GREEN=20
+DARKGREEN=50
+title_text= "Feed the Dragon"
+lives_text= "Lives"
+get_rect()
+score_rect=(20,40)
+title_rect= (WINDOW_WIDTH/2,WINDOW_HEIGHT/2)
+lives_rect= WINDOW_WIDTH
+
 
 
 # Set sounds and music
@@ -106,10 +91,11 @@ def update_display():
 
 
 # The main game loop
-# TODO:
-#   - Play the background music in a loop using pygame.mixer.music.play(...)
-#   - Create a variable named running and set it to True; this will control the main while loop.
+pygame.mixer.music.play
 
+running = True
+clock = pygame.time.Clock()
+screen = pygame.display.set_mode((800, 600))
 
 def tick():
     # TODO:
@@ -119,11 +105,10 @@ def tick():
 
 
 def is_still_running():
-    # TODO:
-    #   - Get the pygame event list with pygame.event.get()
-    #   - If you see an event of type pygame.QUIT, set running to False
-    #     so the main loop will end and the game can quit.
-    pass # TODO: remove this when finished
+    global running
+    for item in pygame.event.get():
+        if item.type == pygame.QUIT:
+            running = False
 
 
 def move_player():
@@ -170,35 +155,32 @@ def update_hud():
 
 
 def game_over_check():
-    # TODO:
-    #   - If player_lives reaches 0:
-    #       * Draw the game over text and the "press any key to play again" text on the screen.
-    #       * Update the display so the player can see the game over screen.
-    #       * Stop the background music.
-    #       * Create a loop (e.g., is_paused = True) that:
-    #           - Waits for events:
-    #               + If the player presses any key (KEYDOWN):
-    #                   · Reset score to 0
-    #                   · Reset player_lives to PLAYER_STARTING_LIVES
-    #                   · Reset player position to center vertically
-    #                   · Reset coin_velocity to COIN_STARTING_VELOCITY
-    #                   · Restart the background music
-    #                   · Exit the pause loop (resume game)
-    #               + If the player clicks the window close button (QUIT):
-    #                   · Set running to False and exit the pause loop so the game can end.
-    pass # TODO: remove this when finished
-
+    player_lives=0
+    update_display()
+    while running:
+        tick()
+        if is_still_running():
+            player_lives=PLAYER_LIVES
+            update_display()
+        is_paused=True
+        for item in pygame.event.get():
+            if item.type == pygame.QUIT:
+                reset_score=0
+                reset_player_lives=0
+                reset_player_position=0
+                reset_player_velocity=0
+                reset_player_acceleration=0
+                reset_coin_velocity= COIN_STARTING_VELOCITY
+                reset_coin_acceleration= COIN_STARTING_VELOCITY
+                reset_pygame.music.stop()
 
 def update_screen():
-    # TODO:
-    #   - Fill the display_surface with a background color (e.g., BLACK) using your fill(...) helper.
-    #   - Draw the HUD elements on the screen:
-    #       * score_text, title_text, lives_text at their rect positions using your blit(...) helper.
-    #   - Draw a horizontal line across the screen near the top to separate the HUD from the play area.
-    #   - Draw the player image and the coin image at their rect positions using your blit(...) helper.
-    #   - Finally, call update_display() so that everything appears on the screen.
-    pass
-
+    display_surface.fill(BLACK)
+    blit(score_text, (title_text, lives_text), score_rect)
+    blit(title_text, (title_text, lives_text), title_rect)
+    blit(lives_text, (lives_text, lives_text), lives_rect)
+    update_display()
+    pygame.display.update()
 
 while running:
     # Main game loop steps:
