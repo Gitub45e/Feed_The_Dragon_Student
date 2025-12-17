@@ -126,8 +126,10 @@ def handle_collisions():
     global score, coin_velocity
     if player_rect.colliderect(coin_rect):
         score += 1
+        coin_sound.play()
         coin_velocity += COIN_ACCELERATION
-        ### reset the coin_rect's x and y to what it was at the start.
+        coin_rect.x = WINDOW_WIDTH + BUFFER_DISTANCE
+        coin_rect.y = random.randint(64, WINDOW_HEIGHT - 32)
 
 
 
@@ -140,8 +142,9 @@ def update_hud():
 def game_over_check():
     global player_lives, coin_velocity, score, coin_sound, game_over_text, running
     if player_lives == 0:
-        blit(display_surface), game_over_text == make_text(font, "GAMEOVER", GREEN, DARKGREEN)
-        blit (continue_text) == make_text(font, "Press any key to play again", GREEN, DARKGREEN)
+        blit(display_surface, game_over_text, game_over_rect)
+        blit(display_surface, continue_text, continue_rect)
+
         update_display()
         pygame.mixer.music.stop()
         is_paused = True
@@ -153,8 +156,11 @@ def game_over_check():
                 if item.type == pygame.KEYDOWN:
                     score = 0
                     player_lives = PLAYER_STARTING_LIVES
-                    ### coin x and y back to original , player's y back in the middle, coin_velocity to starting,
-                    reset_pygame.music.play(-1)
+                    coin_rect.x = WINDOW_WIDTH + BUFFER_DISTANCE
+                    coin_rect.y = random.randint(64, WINDOW_HEIGHT - 32)
+                    player_rect.y = WINDOW_HEIGHT // 2
+                    pygame.mixer.music.play(-1, 0.0)
+
                     is_paused = False
 
 
@@ -182,7 +188,7 @@ while running:
     handle_coin()
     handle_collisions()
     update_hud()
-    # game_over_check()
+    game_over_check()
     update_screen()
     tick()
 
